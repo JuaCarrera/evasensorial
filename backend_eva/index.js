@@ -13,7 +13,7 @@ const app = express();
 
 // Configuración CORS
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'https://evasensorial.netlify.app/' , // aquí defines tu frontend, ej: "http://localhost:5173"
+  origin: "*", // aquí defines tu frontend, ej: "http://localhost:5173"
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization' ,'idempotency-key']
 };
