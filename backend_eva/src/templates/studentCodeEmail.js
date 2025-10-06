@@ -13,7 +13,7 @@ function renderStudentCodeEmail({
   const cardBg    = '#ffffff';
   const textMain  = '#1F2937';
   const textMuted = '#6B7280';
-  const safeUrl   = portalUrl || '#';
+  const safeUrl   = portalUrl || 'https://evasensorial.netlify.app/';
 
   const isFamiliar = role === 'familiar';
 
