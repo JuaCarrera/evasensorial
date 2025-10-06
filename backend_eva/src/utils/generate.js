@@ -1,0 +1,15 @@
+// utils/generate.js
+const crypto = require('crypto');
+
+function generateAccessCode(len = 8) {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let out = '';
+  for (let i = 0; i < len; i++) out += chars[Math.floor(Math.random() * chars.length)];
+  return out;
+}
+
+function generateTempPassword(len = 12) {
+  return crypto.randomBytes(len).toString('base64url').slice(0, len);
+}
+
+module.exports = { generateAccessCode, generateTempPassword };
