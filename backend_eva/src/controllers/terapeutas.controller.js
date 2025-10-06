@@ -1,5 +1,5 @@
 // src/controllers/terapeutas.controller.js
-const pool = require('../../shared/db');
+const pool = require('../../db');
 const bcrypt = require('bcryptjs');
 const { signJwt } = require('../../middleware/auth');
 

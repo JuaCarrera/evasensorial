@@ -1,4 +1,4 @@
-const pool = require('../../shared/db');
+const pool = require('../../db');
 
 /** Helpers */
 function paginacion(query) {

@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const pool = require('../../shared/db');
+const pool = require('../../db');
 
 /* ============= Helpers ============= */
 const genToken = () => crypto.randomBytes(24).toString('base64url');

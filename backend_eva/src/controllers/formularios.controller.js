@@ -1,5 +1,5 @@
 // src/controllers/formularios.controller.js
-const pool = require('../../shared/db');
+const pool = require('../../db');
 
 // ===== Helpers =====
 const toJsonbParam = (v) => {

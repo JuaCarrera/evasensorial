@@ -1,5 +1,5 @@
 // src/controllers/estudiantes.controller.js
-const pool = require('../../shared/db');
+const pool = require('../../db');
 const { generateAccessCode } = require('../utils/generateCode');
 const { sendStudentAccessCode } = require('../services/mailer');
 
