@@ -6,17 +6,16 @@ function makePool() {
   if (process.env.DATABASE_URL) {
     try {
       const parsed = new URL(process.env.DATABASE_URL);
-      console.log(`[DB] Usando DATABASE_URL. Host: ${parsed.hostname}`);
 
-      // ✅ Forzar uso del Shared Pooler (IPv4) de Supabase si se define en .env
-      // Si Render intenta IPv6, lo redirigimos a DB_HOST (shared pooler IPv4)
-      if (process.env.DB_HOST) {
-        parsed.hostname = process.env.DB_HOST;
-        console.log(`[DB] Forzando host IPv4 (Shared Pooler): ${parsed.hostname}`);
-      }
+      // 🔒 Ocultar contraseña en logs
+      const safeUrl = new URL(process.env.DATABASE_URL);
+      safeUrl.password = "*****";
+
+      console.log(`[DB] Usando DATABASE_URL (pooler IPv4). Host: ${parsed.hostname}`);
+      console.log(`[DB] Conexión configurada a: ${safeUrl.toString()}`);
 
       return new Pool({
-        connectionString: parsed.toString(),
+        connectionString: process.env.DATABASE_URL,
         ssl: { rejectUnauthorized: false },
       });
     } catch (_) {
@@ -41,8 +40,9 @@ const pool = makePool();
 (async () => {
   try {
     console.log("[DB] Intentando conectar...");
-    await pool.query("select now()");
-    console.log("[DB] ✅ Conexión OK");
+    const result = await pool.query("select now() as fecha;");
+    console.log("[DB] ✅ Conexión exitosa");
+    console.log("[DB] Hora del servidor:", result.rows[0].fecha);
   } catch (e) {
     console.error("[DB] ❌ Error de conexión:");
     console.error(" - Código:", e.code);
