@@ -34,11 +34,24 @@ const pool = makePool();
 // Prueba temprana y logs más claros si falla
 (async () => {
   try {
-    await pool.query('select 1');
-    console.log('[DB] Conexión OK');
+    console.log("[DB] Intentando conectar...");
+    console.log("[DB] Config:", process.env.DATABASE_URL || {
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      user: process.env.DB_USER,
+      database: process.env.DB_NAME,
+      ssl: "on"
+    });
+
+    await pool.query("select now()");
+    console.log("[DB] Conexión OK");
   } catch (e) {
-    console.error('[DB] Error de conexión:', e.code, e.message);
+    console.error("[DB] Error de conexión:");
+    console.error(" - Código:", e.code);
+    console.error(" - Mensaje:", e.message);
+    console.error(" - Detalles:", e);
   }
 })();
+
 
 module.exports = pool;
