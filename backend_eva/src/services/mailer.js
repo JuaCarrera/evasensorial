@@ -1,24 +1,32 @@
 require('dotenv').config();
-const nodemailer = require('nodemailer');
+const axios = require('axios');
 const { renderStudentCodeEmail } = require('../templates/studentCodeEmail');
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT || 587),
-  secure: process.env.SMTP_SECURE === 'true',
-  auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
-});
+// ==========================================================
+//        CONFIGURACIÓN SMTP2GO API (NO SMTP)
+// ==========================================================
 
+const SMTP2GO_API_URL = "https://api.smtp2go.com/v3/email/send";
+const SMTP2GO_API_KEY = "api-FA9284F082A447729C783BC864F12098";
+const MAIL_FROM = "isistemas@umariana.edu.co";
+
+// ==========================================================
+//        FUNCIÓN PRINCIPAL
+// ==========================================================
 async function sendStudentAccessCode({
   to,
-  estudiante,                     // { nombre, apellidos }
+  estudiante,
   codigo,
   portalUrl,
-  role = 'familiar',              // 'familiar' | 'profesor'
-  recipientName = ''              // opcional: nombre del destinatario
+  role = "familiar",
+  recipientName = ""
 }) {
-  const { nombre = '', apellidos = '' } = estudiante || {};
-  const title = role === 'profesor' ? 'Invitación para docente' : 'Invitación para acudiente';
+  const { nombre = "", apellidos = "" } = estudiante || {};
+
+  const title =
+    role === "profesor"
+      ? "Invitación para docente"
+      : "Invitación para acudiente";
 
   const html = renderStudentCodeEmail({
     title,
@@ -29,23 +37,34 @@ async function sendStudentAccessCode({
     recipientName
   });
 
-  const text =
+  const text = 
 `${title}
-Destinatario: ${recipientName || '(sin nombre)'}
+Destinatario: ${recipientName || "(sin nombre)"}
 Estudiante: ${nombre} ${apellidos}
 Código: ${codigo}
-Portal: ${portalUrl || ''}`;
+Portal: ${portalUrl || ""}`;
 
-  const subjectPrefix = role === 'profesor' ? 'Docente' : 'Acudiente';
-  const subject = `${subjectPrefix} • Código de acceso para ${nombre || 'estudiante'}`;
+  const subjectPrefix = role === "profesor" ? "Docente" : "Acudiente";
+  const subject = `${subjectPrefix} • Código de acceso para ${nombre || "estudiante"}`;
 
-  return transporter.sendMail({
-    from: process.env.MAIL_FROM || process.env.SMTP_USER,
-    to,
+  // ==========================================================
+  //    PETICIÓN EXACTA SEGÚN DOCUMENTACIÓN SMTP2GO
+  // ==========================================================
+  const payload = {
+    api_key: SMTP2GO_API_KEY,
+    to: [to],
+    sender: MAIL_FROM,
     subject,
-    html,
-    text
+    text_body: text,
+    html_body: html
+  };
+
+  // Enviar
+  const response = await axios.post(SMTP2GO_API_URL, payload, {
+    headers: { "Content-Type": "application/json" }
   });
+
+  return response.data;
 }
 
-module.exports = { transporter, sendStudentAccessCode };
+module.exports = { sendStudentAccessCode };
