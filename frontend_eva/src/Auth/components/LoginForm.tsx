@@ -134,10 +134,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onGoToRegister }) => {
 
         <div className="mt-8 text-center">
           <p className="text-purple-200">
-            Padre o docente{' '}
-            <button onClick={onGoToRegister} className="text-purple-300 hover:text-white font-semibold transition-colors duration-200 hover:underline">
-              Regístrate aquí
-            </button>
+            Ingresa administrador
           </p>
         </div>
       </div>
