@@ -4,8 +4,8 @@ function renderStudentCodeEmail({
   studentName,
   code,
   portalUrl,
-  role = 'familiar',         // 'familiar' | 'profesor'
-  recipientName = ''         // opcional: nombre de quien recibe
+  role = 'familiar',
+  recipientName = ''
 }) {
   const primary   = '#7C3AED';
   const gradFrom  = '#6D28D9';
@@ -13,11 +13,12 @@ function renderStudentCodeEmail({
   const cardBg    = '#ffffff';
   const textMain  = '#1F2937';
   const textMuted = '#6B7280';
-  const safeUrl   = portalUrl || 'https://evasensorial.netlify.app/';
+
+  // 🔥 URL fija al registro (sin código en la URL)
+  const safeUrl = 'https://evasensorial.netlify.app/register';
 
   const isFamiliar = role === 'familiar';
 
-  // Encabezados y copys por rol
   const heading = isFamiliar
     ? 'Invitación para acudiente'
     : 'Invitación para docente';
@@ -52,16 +53,18 @@ function renderStudentCodeEmail({
   <div class="container" style="padding:32px;">
     <table role="presentation" width="100%" style="max-width:640px;margin:0 auto;">
       <tr><td style="padding:8px 0 16px 0;text-align:center">
-        <!-- Ícono cerebro (Bootstrap Icons inline) -->
+        
         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#F3E8FF" viewBox="0 0 16 16" aria-hidden="true">
           <path d="M7.5 0a2.5 2.5 0 0 0-2.45 2H5a2 2 0 0 0-2 2v2.5H2a2 2 0 0 0-2 2V9a2 2 0 0 0 2 2h1v2.5a2 2 0 0 0 2 2h.05A2.5 2.5 0 0 0 7.5 16v-1a1.5 1.5 0 0 1-1.5-1.5V8h3v5.5A1.5 1.5 0 0 1 7.5 15v1a2.5 2.5 0 0 0 2.45-2H11a2 2 0 0 0 2-2V11h1a2 2 0 0 0 2-2V8.5a2 2 0 0 0-2-2h-1V4a2 2 0 0 0-2-2h-.05A2.5 2.5 0 0 0 7.5 0z"/>
         </svg>
+
         <div style="color:#F3E8FF;font-weight:700;font-size:18px;letter-spacing:.3px">EVA Sensorial</div>
       </td></tr>
     </table>
 
     <table role="presentation" width="100%" style="max-width:640px;margin:0 auto;background:${cardBg};border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,.18)">
       <tr><td class="card" style="padding:28px">
+        
         <h1 style="margin:0;color:${textMain};font-size:22px;line-height:1.3">${esc(title || heading)}</h1>
         <p style="margin:10px 0 0;color:${textMuted};font-size:14px">${greetLine}</p>
         <p style="margin:6px 0 0;color:${textMuted};font-size:14px">${esc(subheading)}</p>
@@ -75,20 +78,21 @@ function renderStudentCodeEmail({
         </div>
 
         <div style="margin:24px 0 22px">
-          <a class="btn" href="${esc(safeUrl)}" style="display:inline-block;background:${primary};color:#fff;text-decoration:none;font-weight:700;border-radius:12px;padding:14px 22px">
+          <a class="btn" href="${safeUrl}" style="display:inline-block;background:${primary};color:#fff;text-decoration:none;font-weight:700;border-radius:12px;padding:14px 22px">
             ${esc(buttonText)}
           </a>
         </div>
 
         <p style="margin:0;color:${textMuted};font-size:13px;line-height:1.6">
           Si el botón no funciona, copia y pega esta URL en tu navegador:
-          <br><span style="color:${textMain}">${esc(safeUrl)}</span>
+          <br><span style="color:${textMain}">${safeUrl}</span>
         </p>
 
         <hr style="border:none;border-top:1px solid #E5E7EB;margin:24px 0">
         <p style="margin:0;color:${textMuted};font-size:12px">
           Si no esperabas este mensaje, puedes ignorarlo. Tu correo no será vinculado si no completas el proceso.
         </p>
+
       </td></tr>
     </table>
 
@@ -102,9 +106,13 @@ function renderStudentCodeEmail({
 </html>`;
 }
 
-function esc(s=''){return String(s)
-  .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-  .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
-  .replace(/'/g,'&#039;');}
+function esc(s=''){
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+}
 
 module.exports = { renderStudentCodeEmail };
