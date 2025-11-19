@@ -6,37 +6,50 @@ import LoginForm from './Auth/components/LoginForm';
 import RegisterForm from './Auth/components/RegisterForm';
 import PrivateRoute from './Auth/components/PrivateRoute';
 import AppShell from './Dashboard/components/AppShell';
-import AppShellLite from './Dashboard/components/AppShellLite'; // 👈 corregido
+import AppShellLite from './Dashboard/components/AppShellLite'; 
 import { Dashboard } from './Dashboard/components/Dashboard';
 import { Terapeutas } from './Dashboard/components/Terapeutas';
 import { Estudiantes } from './Dashboard/components/Estudiantes/Estudiantes';
 import { Configuracion } from './Dashboard/components/Configuracion';
 import { Formularios } from './Dashboard/components/Formularios';
 import { Respuestas } from './Dashboard/components/Respuestas';
-import { EstudiantesLite } from './Dashboard/components/EstudiantesLite'; // 👈 nuevo import
+import { EstudiantesLite } from './Dashboard/components/EstudiantesLite';
 import FormularioPublicView from './public/FormularioPublicView';
 
 import { ToastContainer } from 'react-toastify';
 import { RespuestasLite } from './Dashboard/components/RespuestasLite';
 
 function App() {
-  const [currentView, setCurrentView] = React.useState<'login' | 'register'>('login');
 
   return (
     <>
       <Routes>
+
+        {/* ======================== */}
+        {/* Login (ruta principal)   */}
+        {/* ======================== */}
         <Route
           path="/"
           element={
             <BackgroundLayout>
-              {currentView === 'login' ? (
-                <LoginForm onGoToRegister={() => setCurrentView('register')} />
-              ) : (
-                <RegisterForm onBackToLogin={() => setCurrentView('login')} />
-              )}
+              <LoginForm />
             </BackgroundLayout>
           }
         />
+
+        {/* ======================== */}
+        {/* Register (nueva ruta)   */}
+        {/* ======================== */}
+        <Route
+          path="/register"
+          element={
+            <BackgroundLayout>
+              <RegisterForm />
+            </BackgroundLayout>
+          }
+        />
+
+        {/* Vista pública */}
         <Route path="/formulario/:id" element={<FormularioPublicView />} />
 
         {/* Dashboard Superadmin */}
@@ -56,7 +69,7 @@ function App() {
           <Route path="configuracion" element={<Configuracion />} />
         </Route>
 
-        {/* Dashboard Lite (usuarios normales) */}
+        {/* Dashboard Lite */}
         <Route
           path="/lite-dashboard"
           element={
@@ -68,8 +81,9 @@ function App() {
           <Route index element={<EstudiantesLite />} />
           <Route path="estudiantes" element={<EstudiantesLite />} />
           <Route path="respuestaslite" element={<RespuestasLite />} />
-          <Route path="configuracion" element={<Configuracion />} /> {/* 👈 agregado */}
+          <Route path="configuracion" element={<Configuracion />} />
         </Route>
+
       </Routes>
 
       <ToastContainer
